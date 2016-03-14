@@ -1,2 +1,2 @@
 # HNMobileTest_android
-ReinDesign App Test for Android
+ReignDesign App Test for Android
