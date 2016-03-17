@@ -1,12 +1,15 @@
 package anibalbastias.hnmobiletest.util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.Html;
 import android.text.SpannableString;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +60,14 @@ public class Libcomun {
                 Toast.makeText(context, msj, Toast.LENGTH_LONG).show();
                 break;
         }
+    }
+
+    public static AlertDialog.Builder getAlertDialog(Activity activity, int layout) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(layout, null);
+        dialogBuilder.setView(dialogView);
+        return dialogBuilder;
     }
 
     public static void setFontTextViewBlack(TextView text, Context context) {

@@ -1,12 +1,17 @@
 package anibalbastias.hnmobiletest.ui.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.OnItemMovedListener;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -25,7 +30,7 @@ import anibalbastias.hnmobiletest.ui.view.pulltorefresh_loadmore.PullAndLoadList
 import anibalbastias.hnmobiletest.ui.view.pulltorefresh_loadmore.PullToRefreshListView;
 import anibalbastias.hnmobiletest.util.Libcomun;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private int page_news;
     private ArrayList<HNNews> hnNews;
@@ -36,14 +41,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState, R.layout.activity_main);
 
         storageAPI = new StorageAPI(MainActivity.this);
         setXML();
     }
 
     private void setXML() {
+        actionGetListView();
         is_refresh = false;
         page_news = 0;
 
@@ -111,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 itemP1.setTitle(hnNews_items.getHits().get(i).getStory_title());
             itemP1.setAuthor(hnNews_items.getHits().get(i).getAuthor());
             itemP1.setCreated_at(hnNews_items.getHits().get(i).getCreated_at());
+            itemP1.setId_new("" + hnNews_items.getHits().get(i).getCreated_at_i());
 
             // Insert objects
             hnNews_more.add(itemP1);
@@ -145,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 itemP1.setTitle(hnNews_items.getHits().get(i).getStory_title());
             itemP1.setAuthor(hnNews_items.getHits().get(i).getAuthor());
             itemP1.setCreated_at(hnNews_items.getHits().get(i).getCreated_at());
+            itemP1.setId_new("" + hnNews_items.getHits().get(i).getCreated_at_i());
 
             // Insert objects
             hnNews.add(itemP1);
@@ -152,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter_news = new HNNewsAdapter(MainActivity.this, hnNews);
 
-        //SimpleSwipeUndoAdapter simpleSwipeUndoAdapter = new SimpleSwipeUndoAdapter(adapter_news, this, new MyOnDismissCallback(adapter_news));
+        //SwipeDismissAdapter swipeDismissAdapter = new SwipeDismissAdapter(adapter_news, new MyOnDismissCallback(adapter_news));
         AlphaInAnimationAdapter animAdapter = new AlphaInAnimationAdapter(adapter_news);
         animAdapter.setAbsListView(listView);
         assert animAdapter.getViewAnimator() != null;
@@ -161,12 +168,12 @@ public class MainActivity extends AppCompatActivity {
 
          /* Enable swipe to dismiss */
 
-        /*
-        listView.enableSimpleSwipeUndo();
+        //listView.enableSimpleSwipeUndo();
         listView.setOnItemMovedListener(new MyOnItemMovedListener(adapter_news));
-        listView.setOnItemLongClickListener(new MyOnItemLongClickListener(listView));
         listView.setAdapter(animAdapter);
-        */
+
+        /* Enable swipe to dismiss */
+        listView.enableSwipeToDismiss(new MyOnDismissCallback(adapter_news));
 
         try {
             adapter_news = (HNNewsAdapter) listView.getAdapter();
@@ -177,11 +184,45 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private class MyOnDismissCallback implements OnDismissCallback {
+
+        private final HNNewsAdapter mAdapter;
+
+        MyOnDismissCallback(final HNNewsAdapter adapter) {
+            mAdapter = adapter;
+        }
+
+        @Override
+        public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
+            for (int position : reverseSortedPositions) {
+                hnNews.remove(position);
+                adapter_news.notifyDataSetChanged();
+            }
+        }
+    }
+
+    private class MyOnItemMovedListener implements OnItemMovedListener {
+
+        private final HNNewsAdapter mAdapter;
+        private Toast mToast;
+
+        MyOnItemMovedListener(final HNNewsAdapter adapter) {
+            mAdapter = adapter;
+        }
+
+        @Override
+        public void onItemMoved(final int originalPosition, final int newPosition) {
+            if (mToast != null) {
+                mToast.cancel();
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
-        actionGetListView();
     }
 
     private void actionGetListView() {

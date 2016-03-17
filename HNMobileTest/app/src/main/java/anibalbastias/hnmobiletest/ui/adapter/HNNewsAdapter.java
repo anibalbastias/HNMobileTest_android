@@ -1,6 +1,7 @@
 package anibalbastias.hnmobiletest.ui.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,8 @@ import java.util.ArrayList;
 
 import anibalbastias.hnmobiletest.R;
 import anibalbastias.hnmobiletest.model.HNNews;
+import anibalbastias.hnmobiletest.ui.activity.NewsActivity;
 import anibalbastias.hnmobiletest.util.Libcomun;
-
 
 /**
  * Created by anibalbastias on 06-10-15.
@@ -72,7 +73,9 @@ public class HNNewsAdapter extends ArrayAdapter<HNNews> {
             // Creates a ViewHolder and store references to the two children views
             // we want to bind data to.
             holder = new ViewHolder();
-            holder.text = (TextView) convertView.findViewById(R.id.title);
+            holder.title = (TextView) convertView.findViewById(R.id.title);
+            holder.author = (TextView) convertView.findViewById(R.id.author);
+            holder.created_at = (TextView) convertView.findViewById(R.id.created_at);
 
             // Bind the data efficiently with the holder.
 
@@ -87,24 +90,32 @@ public class HNNewsAdapter extends ArrayAdapter<HNNews> {
         //holder.text.setText(filteredData.get(position).getTitle_image());
 
         // Title
-        TextView title = (TextView) convertView.findViewById(R.id.title);
-        Libcomun.setFontTextViewRegular(title, c);
-        title.setText(Libcomun.decodeHtmlEntitiesString(item.getTitle()));
+        Libcomun.setFontTextViewRegular(holder.title, c);
+        holder.title.setText(Libcomun.decodeHtmlEntitiesString(item.getTitle()));
 
         // Author
-        TextView author = (TextView) convertView.findViewById(R.id.author);
-        Libcomun.setFontTextViewLight(author, c);
-        author.setText(Libcomun.decodeHtmlEntitiesString(item.getAuthor()));
+        Libcomun.setFontTextViewLight(holder.author, c);
+        holder.author.setText(Libcomun.decodeHtmlEntitiesString(item.getAuthor()));
 
         // Created at
-        TextView created_at = (TextView) convertView.findViewById(R.id.created_at);
-        Libcomun.setFontTextViewLight(created_at, c);
-        created_at.setText(Libcomun.getPrettyTime(Libcomun.decodeHtmlEntitiesString(item.getCreated_at())));
+        Libcomun.setFontTextViewLight(holder.created_at, c);
+        holder.created_at.setText(Libcomun.getPrettyTime(Libcomun.decodeHtmlEntitiesString(item.getCreated_at())));
+
+        (convertView.findViewById(R.id.item_news)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent5 = new Intent(c, NewsActivity.class);
+                intent5.putExtra("id_new", item.getId_new());
+                c.startActivity(intent5);
+            }
+        });
 
         return convertView;
     }
 
     static class ViewHolder {
-        TextView text;
+        TextView title;
+        TextView author;
+        TextView created_at;
     }
 }
