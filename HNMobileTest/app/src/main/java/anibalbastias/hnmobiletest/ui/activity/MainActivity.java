@@ -231,11 +231,15 @@ public class MainActivity extends BaseActivity {
             (findViewById(R.id.error_internet_layout)).setVisibility(View.GONE);
             new NetworkAPI(MainActivity.this).getHNNews(0, getString(R.string.android), page_news);
         } else {
-            if (storageAPI.getHNNews() != null) {
-                (findViewById(R.id.error_internet_layout)).setVisibility(View.GONE);
-                HNNewsResponse hnNewsResponse = storageAPI.getHNNews();
-                setAdapterListView(hnNewsResponse);
-            } else {
+            try {
+                if (storageAPI.getHNNews() != null) {
+                    (findViewById(R.id.error_internet_layout)).setVisibility(View.GONE);
+                    HNNewsResponse hnNewsResponse = storageAPI.getHNNews();
+                    setAdapterListView(hnNewsResponse);
+                } else {
+                    (findViewById(R.id.error_internet_layout)).setVisibility(View.VISIBLE);
+                }
+            } catch (Exception e) {
                 (findViewById(R.id.error_internet_layout)).setVisibility(View.VISIBLE);
             }
         }
