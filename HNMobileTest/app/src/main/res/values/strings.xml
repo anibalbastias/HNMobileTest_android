@@ -2,4 +2,10 @@
     <string name="app_name">HNMobileTest</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
     <string name="title_activity_news">NewsActivity</string>
+    <string name="endpoint_hnmobile" translatable="false">http://hn.algolia.com</string>
+    <string name="android">android</string>
+    <string name="pull_to_refresh_pull_label">Pull to refresh...</string>
+    <string name="pull_to_refresh_release_label">Release to refresh...</string>
+    <string name="pull_to_refresh_refreshing_label">Loading...</string>
+    <string name="pull_to_refresh_tap_label">Tap to refresh...</string>
 </resources>

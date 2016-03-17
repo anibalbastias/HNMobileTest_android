@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_main">
+
+    <anibalbastias.hnmobiletest.ui.view.pulltorefresh_loadmore.PullAndLoadListView
+        android:id="@+id/items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_items"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:focusable="false" />
+
+    <LinearLayout
+        android:id="@+id/error_internet_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/error_internet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="No internet connection, try again!" />
+
+        <TextView
+            android:id="@+id/button_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:clickable="true"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_box_rounded1"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="REFRESH" />
+
+    </LinearLayout>
+
+</LinearLayout>
